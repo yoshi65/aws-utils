@@ -3,7 +3,7 @@
 #
 # FileName: 	lambda_function
 # CreatedDate:  2020-07-02 19:57:06 +0900
-# LastModified: 2020-09-21 13:43:01 +0900
+# LastModified: 2020-09-24 09:12:20 +0900
 #
 
 
@@ -12,6 +12,11 @@ import boto3
 import requests
 import os
 from datetime import datetime
+import logging
+
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 
 def lambda_handler(event, context):
@@ -20,7 +25,8 @@ def lambda_handler(event, context):
     d = sorted(table.scan()['Items'], key=lambda x: x['Date'], reverse=True)[0]
 
     try:
-        print(event['detail']['dead'])
+        logger.info(event)
+        logger.info(event['detail']['dead'])
         if is_dead(d):
             payload = {
                 'attachments': [{
@@ -29,8 +35,10 @@ def lambda_handler(event, context):
                     'text': f'Last updated: {d["Date"]}'
                 }]
             }
+
             post_slack(payload)
-    except KeyError:
+    except KeyError as e:
+        logger.info(e)
         payload = {
             'attachments': [{
                 'color': '#D3D3D3',
