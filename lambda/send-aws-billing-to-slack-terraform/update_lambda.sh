@@ -11,4 +11,4 @@ zip -r9 ${OLDPWD}/function.zip .
 cd $OLDPWD
 zip -g function.zip app.py
 
-aws s3 cp function.zip s3://<bucket-for-lambda>/lambda/send-aws-billing-to-slack/function.zip
+aws lambda update-function-code --function-name "send-aws-billing-to-slack" --zip-file fileb://function.zip --publish

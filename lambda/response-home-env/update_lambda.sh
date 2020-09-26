@@ -11,4 +11,4 @@ zip -r9 ${OLDPWD}/function.zip .
 cd $OLDPWD
 zip -g function.zip lambda_function.py
 
-aws s3 cp function.zip s3://<bucket-for-lambda>/lambda/response-home-env/function.zip
+aws lambda update-function-code --function-name "home-env" --zip-file fileb://function.zip --publish

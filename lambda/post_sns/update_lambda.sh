@@ -5,4 +5,4 @@ set -eu
 rm -f function.zip
 zip -r9 function.zip lambda_function.py
 
-aws s3 cp function.zip s3://<bucket-for-lambda>/lambda/post_sns/function.zip
+aws lambda update-function-code --function-name "post-sns" --zip-file fileb://function.zip --publish
