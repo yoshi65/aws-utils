@@ -3,7 +3,7 @@
 #
 # FileName: 	lambda_function
 # CreatedDate:  2020-07-02 19:57:06 +0900
-# LastModified: 2020-09-24 09:12:20 +0900
+# LastModified: 2020-09-26 10:15:36 +0900
 #
 
 
@@ -25,8 +25,7 @@ def lambda_handler(event, context):
     d = sorted(table.scan()['Items'], key=lambda x: x['Date'], reverse=True)[0]
 
     try:
-        logger.info(event)
-        logger.info(event['detail']['dead'])
+        logger.info(event['dead'])
         if is_dead(d):
             payload = {
                 'attachments': [{
@@ -65,4 +64,4 @@ def post_slack(payload):
 
 def is_dead(d):
     diff = datetime.now() - datetime.strptime(d["Date"], '%Y-%m-%d %H:%M')
-    return (diff > 60 * 30)
+    return (diff.seconds > 60 * 30)
