@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - lambda/home-env/lambda_function.py
+      - lambda/home-env/update_lambda.sh
       - .github/workflows/home-env.yml
 
 env:
