@@ -27,4 +27,4 @@ jobs:
         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
       working-directory: ${{ env.WORKDIR }}
       run: |
-        ./update-lambda.sh
+        ./update_lambda.sh
