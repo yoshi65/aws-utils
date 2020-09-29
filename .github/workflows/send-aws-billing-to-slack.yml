@@ -1,0 +1,31 @@
+name: Deploy send-aws-billing-to-slack
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - lambda/send-aws-billing-to-slack/lambda_function.py
+      - lambda/send-aws-billing-to-slack/update_lambda.sh
+      - .github/workflows/send-aws-billing-to-slack.yml
+
+env:
+  WORKDIR: lambda/send-aws-billing-to-slack
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: deploy
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+      working-directory: ${{ env.WORKDIR }}
+      run: |
+        ./update_lambda.sh

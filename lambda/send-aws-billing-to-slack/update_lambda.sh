@@ -12,3 +12,5 @@ cd $OLDPWD
 zip -g function.zip app.py
 
 aws lambda update-function-code --function-name "send-aws-billing-to-slack" --zip-file fileb://function.zip --publish
+result=$(aws lambda update-function-code --function-name "send-aws-billing-to-slack" --zip-file fileb://function.zip --publish)
+echo "LastUpdateStatus: $(echo $result | jq -r '.LastUpdateStatus')"
