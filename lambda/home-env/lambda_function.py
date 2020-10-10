@@ -3,7 +3,7 @@
 #
 # FileName: 	lambda_function
 # CreatedDate:  2020-07-02 19:57:06 +0900
-# LastModified: 2020-10-11 05:32:02 +0900
+# LastModified: 2020-10-11 05:41:49 +0900
 #
 
 
@@ -65,7 +65,6 @@ def post_slack(payload):
 def is_dead(d):
     logger.info(f"Now : {datetime.now()}")
     logger.info(f"Last: {datetime.strptime(d['Date'], '%Y-%m-%d %H:%M')}")
-    diff = datetime.now() - datetime.strptime(d["Date"], '%Y-%m-%d %H:%M')  # UTC
-    diff_total = diff.days * 60 * 60 * 24 + diff.seconds
-    logger.info(diff_total)
-    return (diff_total > 60 * 30)
+    diff = abs(datetime.now() - datetime.strptime(d["Date"], '%Y-%m-%d %H:%M'))  # UTC
+    logger.info(diff.seconds)
+    return (diff.seconds > 60 * 30)
