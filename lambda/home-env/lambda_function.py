@@ -3,7 +3,7 @@
 #
 # FileName: 	lambda_function
 # CreatedDate:  2020-07-02 19:57:06 +0900
-# LastModified: 2020-10-11 05:41:49 +0900
+# LastModified: 2020-10-11 09:23:22 +0900
 #
 
 
@@ -67,4 +67,4 @@ def is_dead(d):
     logger.info(f"Last: {datetime.strptime(d['Date'], '%Y-%m-%d %H:%M')}")
     diff = abs(datetime.now() - datetime.strptime(d["Date"], '%Y-%m-%d %H:%M'))  # UTC
     logger.info(diff.seconds)
-    return (diff.seconds > 60 * 30)
+    return (diff.seconds - 60 * 60 * 9 > 60 * 30)
