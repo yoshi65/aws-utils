@@ -3,11 +3,12 @@
 #
 # FileName: 	lambda_function
 # CreatedDate:  2021-04-27 20:41:27 +0900
-# LastModified: 2021-08-25 10:14:25 +0900
+# LastModified: 2021-08-26 00:04:42 +0900
 #
 
 
 import boto3
+from decimal import Decimal
 import json
 import logging
 from os import getenv
@@ -53,7 +54,7 @@ def insert_meter_result(table, meter_result: dict, date_now) -> None:
         Item={
             'Id': int(date_now.timestamp()),
             'Date': date_now.strftime('%Y-%m-%d %H:%M'),
-            'Temperature': meter_result["temperature"],
+            'Temperature': Decimal(meter_result["temperature"]),
             'Humidity': meter_result["humidity"],
         }
     )
