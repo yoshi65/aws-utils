@@ -1,0 +1,45 @@
+name: meter2dynamodb_deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - lambda/meter2dynamodb/Dockerfile
+      - lambda/meter2dynamodb/requirements.txt
+      - lambda/meter2dynamodb/lambda_function.py
+      - .github/workflows/meter2dynamodb_deploy.yaml
+
+env:
+  FUNCTION_NAME: meter2dynamodb
+  TABLE_NAME: home_meter
+  SWITCHBOT_ACCESS_TOKEN: ${{ secrets.SWITCHBOT_ACCESS_TOKEN }}
+  URI: "${{ secrets.CONTAINER_REGISTRY_PATH }}/meter2dynamodb"
+  WORKDIR: ./lambda/meter2dynamodb
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login to ECR
+        run: aws ecr get-login-password --region ${{ secrets.AWS_DEFAULT_REGION }} | docker login --username AWS --password-stdin ${{ secrets.CONTAINER_REGISTRY_PATH }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+
+      - name: Build and push docker image
+        run: |
+          docker build --build-arg table_name=${{ env.TABLE_NAME }} --build-arg access_token=${{ env.SWITCHBOT_ACCESS_TOKEN }} -t ${{ env.URI }} .
+          docker push ${{ env.URI }}
+        working-directory: ${{ env.WORKDIR }}
+
+          # - name: Update lambda function
+          #   run: aws lambda update-function-code --function-name ${{ env.FUNCTION_NAME }} --image-uri "${{ env.URI }}:latest" > /dev/null
+          #   working-directory: ${{ env.WORKDIR }}
+          #   env:
+          #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          #     AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
