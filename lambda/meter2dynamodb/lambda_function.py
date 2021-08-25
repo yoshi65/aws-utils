@@ -3,7 +3,7 @@
 #
 # FileName: 	lambda_function
 # CreatedDate:  2021-04-27 20:41:27 +0900
-# LastModified: 2021-08-26 00:09:21 +0900
+# LastModified: 2021-08-26 00:15:00 +0900
 #
 
 
@@ -54,7 +54,7 @@ def insert_meter_result(table, meter_result: dict, date_now) -> None:
         Item={
             'Id': int(date_now.timestamp()),
             'Date': date_now.strftime('%Y-%m-%d %H:%M'),
-            'Temperature': str(meter_result["temperature"]),
+            'Temperature': Decimal(str(meter_result["temperature"])),
             'Humidity': meter_result["humidity"],
         }
     )
