@@ -12,7 +12,7 @@ on:
 env:
   FUNCTION_NAME: send-alert-to-slack
   ALERT_WEBHOOK_URL: ${{ secrets.ALERT_WEBHOOK_URL }}
-  URI: "${{ secrets.CONTAINER_REGISTRY_PATH }}/send-alert-to-slack"
+  URI: "${{ secrets.CONTAINER_REGISTRY_PATH }}/aws-utils/send-alert-to-slack"
   WORKDIR: ./lambda/send-alert-to-slack
 
 jobs:
