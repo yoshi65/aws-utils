@@ -30,6 +30,7 @@ def confirm_status():
     site = requests.get(url)
     data = BeautifulSoup(site.text, "html.parser")
     messages = []
+    is_stock = False
 
     items = data.find_all('li', attrs={'class': 'grid__item'})
     for item in items:
@@ -39,12 +40,15 @@ def confirm_status():
             status = "在庫あり"
             if find := item.find('span', class_="badge badge--bottom-left color-inverse"):
                 status = find.get_text()
+                is_stock = True
 
-            result = f"  {name}: {status}"
+            result = f"{name}: {status}"
             logger.info(result)
             messages.append(result)
 
-    send_line_notify('\n' + '\n'.join(messages))
+    if is_stock:
+        logger.info("stock exists")
+        send_line_notify('\n' + '\n'.join(messages))
 
 
 def send_line_notify(notification_message):
