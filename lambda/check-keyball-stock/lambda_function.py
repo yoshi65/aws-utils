@@ -37,9 +37,10 @@ def confirm_status():
         name = item.find_all('a', attrs={'class': 'full-unstyled-link'})[0].get_text().strip()
         logger.info(f"confirming {name}")
         if name.startswith('Keyball'):
-            status = "在庫あり"
             if find := item.find('span', class_="badge badge--bottom-left color-inverse"):
                 status = find.get_text()
+            else:
+                status = "在庫あり"
                 is_stock = True
 
             result = f"{name}: {status}"
