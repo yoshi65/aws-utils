@@ -1,0 +1,31 @@
+name: actionlint
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  path-filter:
+    outputs:
+      changed: ${{steps.changes.outputs.changed}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            changed:
+              - ".github/workflows/*"
+
+  actionlint:
+    if: needs.path-filter.outputs.changed == 'true'
+    needs: path-filter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: actionlint
+        run: |
+          bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+          ./actionlint -color
+        shell: bash

@@ -1,0 +1,28 @@
+name: test
+on:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  ARRAYS: |
+    (
+      "bar"
+      "foo"
+      "tmp"
+    )
+
+jobs:
+  test:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - name: Test cmd
+        run: |
+          arrays=${ARRAYS}
+          for a in "${arrays[@]}"
+          do
+            echo "test: $a"
+          done
