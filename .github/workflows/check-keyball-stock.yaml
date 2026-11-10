@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - lambda/check-keyball-stock/Dockerfile
+      - lambda/check-keyball-stock/requirements.txt
       - lambda/check-keyball-stock/lambda_function.py
       - .github/workflows/check-keyball-stock.yaml
 
